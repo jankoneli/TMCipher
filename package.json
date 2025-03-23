@@ -7,5 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Cornelius Christian",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bower": "^1.8.14",
+    "crypto-js": "^4.2.0",
+    "jquery": "^3.7.1",
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1"
+  }
 }

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Level Access - TMCipher</title>
+    <style>
+        html, body{
+            background: black;
+        }
+        .main{
+            position:absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .channelid, .passphrase{
+            width: 100%;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            background: none;
+            border: none;
+            border-bottom: 1px solid white;
+            outline: none;
+        }
+        button{
+            text-align: center;
+            background: white;
+            border: none;
+            color: black;
+            padding: 0.2rem;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        button:hover{
+            padding-right: 2rem;
+        }
+        h1, input{
+            color: white;
+        }
+        .btnauth{
+            float: right;
+            margin-top: 1rem;
+        }
+        .btnauth:hover{
+            padding-left: 2rem;
+            padding-right: 0.5rem;
+        }
+        
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/bower/crypto-js/crypto-js.js"></script>
+    <script src="src/jquery.min.js"></script>
+    <script>
+        const socket = io();
+        var mode = "";
+        function showAuth(){
+            $(".btns").hide();
+            $(".auth").show();
+        }
+        function createchannel(){
+            showAuth();
+            $(".btnauth").text("CONNECT")
+            mode = "create"
+        }
+        function openchannel(){
+            showAuth();
+            $(".btnauth").text("OPEN CHANNEL")
+            mode = "open"
+        }
+        function auth(){
+            if (!/^[a-zA-Z0-9]+$/.test($(".channelid").val())){
+                alert("CHANNEL ID ONLY CONTAINS ALPHANUMERIC");
+            }else{
+                localStorage.setItem("channelid", $(".channelid").val())
+                localStorage.setItem("passphrase", $(".passphrase").val())
+                open("/channel/"+$(".channelid").val(), "_self")
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div class="btns">
+            <button onclick="createchannel()">CONNECT TO A CHANNEL</button><br>
+        </div>
+        <div class="auth" style="display: none;">
+            <input type="text" class="channelid" placeholder="CHANNEL ID">
+            <input type="password" class="passphrase" placeholder="PASSPHRASE">
+            <button class="btnauth" onclick="auth()">-</button>
+        </div>
+    </div>
+</body>
+</html>
