@@ -2,7 +2,8 @@ var passphrase = localStorage.getItem("passphrase")
 var aborted = false
 // if password is not defined, then kick the user
 if (passphrase == null){
-    alert("Session has been terminated. PLease rejoin. ");
+    aborted = true
+    alert("Session has been terminated. Please rejoin. ");
     open("/", "_self");
 }else{
     passphrase = passphrase.toString();

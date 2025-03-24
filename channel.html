@@ -21,12 +21,27 @@
             font-family: 'Courier New', Courier, monospace;
             color: white;
         }
+        header{
+            font-family: 'Courier New', Courier, monospace;
+            font-size: larger;
+            color: white;
+            display: flex;
+        }
+        header h1{
+            font-weight: bold;
+        }
+        header span{
+            font-weight: 400;
+        }
     </style>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/crypto/crypto-js.js"></script>
     <script src="/src/jquery.min.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Channel: <span class="channelid">how</span></h1>
+    </header>
     <a href="/" style="font-family: 'Courier New', Courier, monospace;margin-bottom: 1rem;">Back to home</a>
     <input type="text" class="msg">
     <div class="messages">
