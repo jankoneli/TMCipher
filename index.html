@@ -45,43 +45,37 @@
         h1, input{
             color: white;
         }
-        .btnauth{
+        .btnconnect{
             float: right;
             margin-top: 1rem;
         }
-        .btnauth:hover{
+        .btnconnect:hover{
             padding-left: 2rem;
             padding-right: 0.5rem;
         }
         
     </style>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/bower/crypto-js/crypto-js.js"></script>
     <script src="src/jquery.min.js"></script>
     <script>
         const socket = io();
         var mode = "";
-        function showAuth(){
+        function showForm(){
             $(".btns").hide();
-            $(".auth").show();
+            $(".auth").show();  
         }
-        function createchannel(){
-            showAuth();
-            $(".btnauth").text("CONNECT")
-            mode = "create"
+        function openform(){
+            showForm();
+            $(".btnconnect").text("CONNECT")
         }
-        function openchannel(){
-            showAuth();
-            $(".btnauth").text("OPEN CHANNEL")
-            mode = "open"
-        }
-        function auth(){
-            if (!/^[a-zA-Z0-9]+$/.test($(".channelid").val())){
-                alert("CHANNEL ID ONLY CONTAINS ALPHANUMERIC");
-            }else{
+        function connect(){
+            if (/^[a-zA-Z0-9]+$/.test($(".channelid").val())){
                 localStorage.setItem("channelid", $(".channelid").val())
                 localStorage.setItem("passphrase", $(".passphrase").val())
-                open("/channel/"+$(".channelid").val(), "_self")
+                open("/c/"+$(".channelid").val(), "_self")
+            }else if($(".channelid").val() == ""){
+                alert("CHANNEL ID IS EMPTY.")
+            }else{
+                alert("CHANNEL ID CAN ONLY CONTAINS ALPHANUMERIC.");
             }
         }
     </script>
@@ -89,12 +83,12 @@
 <body>
     <div class="main">
         <div class="btns">
-            <button onclick="createchannel()">CONNECT TO A CHANNEL</button><br>
+            <button onclick="openform()">CONNECT TO A CHANNEL</button><br>
         </div>
         <div class="auth" style="display: none;">
             <input type="text" class="channelid" placeholder="CHANNEL ID">
             <input type="password" class="passphrase" placeholder="PASSPHRASE">
-            <button class="btnauth" onclick="auth()">-</button>
+            <button class="btnconnect" onclick="connect()">-</button>
         </div>
     </div>
 </body>

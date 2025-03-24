@@ -8,12 +8,14 @@ const io = new Server(server);
 var userscolor = {}
 var usersname = {}
 
+
+
 app.use("/src/", express.static("src"))
-app.use("/bower_components/", express.static("bower_components"))
+app.use("/crypto/", express.static("node_modules/crypto-js"))
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/index.html")
 })
-app.get("/channel/:id", (req, res) => {
+app.get("/c/:id", (req, res) => {
     res.sendFile(__dirname+"/channel.html")
 })
 function choose(choices) {
@@ -24,7 +26,9 @@ io.on("connection", (socket) => {
     console.log("user connected");
     socket.on("joinme", (channelid, userdisplay) => {
         if(!userscolor.hasOwnProperty(socket.id)){
-            userscolor[socket.id] = choose(["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#ffffff", "#999999"])
+            var colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#ffffff", "#999999", "#e87d0d"]
+            userscolor[socket.id] = colors[Object.keys(userscolor).length]
+            console.log(userscolor, Object.keys(userscolor).length    )
         }
         if(!Object.values(usersname).includes(userdisplay)){
             socket.join(channelid)
@@ -34,12 +38,8 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("msgchannel", (msg, room, hash, salt) => {
-        io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id], salt)
+        io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id], salt, socket.id)
     })
 })
 
 server.listen(3030);
-
-var AES = require("crypto-js/aes");
-var test = AES.encrypt("skibidi", "dop dop dop yes yes").toString()
-console.log(test)
