@@ -41,5 +41,8 @@ io.on("connection", (socket) => {
         io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id], salt, socket.id)
     })
 })
+io.on("disconnect", (socket) => {
+    usersname[socket.id] = null
+})
 
 server.listen(3030);

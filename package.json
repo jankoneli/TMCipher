@@ -1,7 +1,7 @@
 {
   "name": "tmcipher",
   "version": "0.1.0",
-  "description": "Tamper-proof School Grading System",
+  "description": "Open-source Encrypted Communication System",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
