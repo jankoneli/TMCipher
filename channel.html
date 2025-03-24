@@ -49,11 +49,9 @@
             open("/", "_self");
 
         });
-        socket.on("message", (user, msg, hash, colorChat) => {
-            console.log(msg, user);
-            console.log(user)
-            var plaintext = CryptoJS.AES.decrypt(msg, passphrase).toString(CryptoJS.enc.Utf8)
-            console.log(CryptoJS.SHA256(plaintext).toString(), hash)
+        socket.on("message", (user, msg, hash, colorChat, salt) => {
+            var key = CryptoJS.PBKDF2(passphrase, salt.toString(), {keySize: 512 / 32, iterations:10000})
+            var plaintext = CryptoJS.AES.decrypt(msg, key.toString()).toString(CryptoJS.enc.Utf8)
             if(CryptoJS.SHA256(plaintext).toString() == hash){
                 document.querySelector(".messages").innerHTML = '<p><span style="color: clr;margin-right: 2px;">user:</span>text</p>'.replace("clr", colorChat).replace("text", plaintext.replaceAll("<", "[REDACTED]").replaceAll(">", "[REDACTED]")).toString(CryptoJS.enc.Utf8).replace("user", user) + document.querySelector(".messages").innerHTML
             }
@@ -64,8 +62,11 @@
         $(".msg").keypress((e) => {
             if(e.which == 13){
                 if (!$(".msg").val() == ""){
+                    var salt = CryptoJS.lib.WordArray.random(128 / 8);
                     var hash = CryptoJS.SHA256($(".msg").val()).toString()
-                    socket.emit("msgchannel", CryptoJS.AES.encrypt($(".msg").val(), passphrase).toString(), localStorage.getItem("channelid"), hash)
+                    var key = CryptoJS.PBKDF2(passphrase, salt.toString(), {keySize: 512 / 32, iterations:10000})
+                    var ciphertext = CryptoJS.AES.encrypt($(".msg").val(), key.toString()).toString()
+                    socket.emit("msgchannel", ciphertext, localStorage.getItem("channelid"), hash, salt.toString())
                     $(".msg").val("")
                     return false;
                 }

@@ -33,9 +33,9 @@ io.on("connection", (socket) => {
             socket.emit("abort")
         }
     })
-    socket.on("msgchannel", (msg, room, hash) => {
-        console.log(msg, room, hash)
-        io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id])
+    socket.on("msgchannel", (msg, room, hash, salt) => {
+        console.log(msg, room, hash, salt)
+        io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id], salt)
     })
 })
 
