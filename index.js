@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
     console.log("user connected");
     socket.on("joinme", (channelid, userdisplay) => {
         if(!userscolor.hasOwnProperty(socket.id)){
-            userscolor[socket.id] = choose(["#ff0000", "#00ff00", "#0000ff", "#ffff00"])
+            userscolor[socket.id] = choose(["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#ffffff", "#999999"])
         }
         if(!Object.values(usersname).includes(userdisplay)){
             socket.join(channelid)
@@ -34,7 +34,6 @@ io.on("connection", (socket) => {
         }
     })
     socket.on("msgchannel", (msg, room, hash, salt) => {
-        console.log(msg, room, hash, salt)
         io.to(room).emit("message", usersname[socket.id], msg, hash, userscolor[socket.id], salt)
     })
 })

@@ -53,10 +53,10 @@
             var key = CryptoJS.PBKDF2(passphrase, salt.toString(), {keySize: 512 / 32, iterations:10000})
             var plaintext = CryptoJS.AES.decrypt(msg, key.toString()).toString(CryptoJS.enc.Utf8)
             if(CryptoJS.SHA256(plaintext).toString() == hash){
-                document.querySelector(".messages").innerHTML = '<p><span style="color: clr;margin-right: 2px;">user:</span>text</p>'.replace("clr", colorChat).replace("text", plaintext.replaceAll("<", "[REDACTED]").replaceAll(">", "[REDACTED]")).toString(CryptoJS.enc.Utf8).replace("user", user) + document.querySelector(".messages").innerHTML
+                document.querySelector(".messages").innerHTML = '<p><span style="color: clr;margin-right: 2px;">user:</span>text</p>'.replace("clr", colorChat).replace("text", plaintext.replaceAll("<", "[REDACTED]").replaceAll(">", "[REDACTED]")).toString(CryptoJS.enc.Utf8).replace("user", CryptoJS.AES.decrypt(user, passphrase).toString(CryptoJS.enc.Utf8)) + document.querySelector(".messages").innerHTML
             }
         })
-        socket.emit("joinme", localStorage.getItem("channelid"), prompt("Enter Display Name: "))
+        socket.emit("joinme", localStorage.getItem("channelid"), CryptoJS.AES.encrypt(prompt("Enter Display Name: "), passphrase).toString())
         
         // Send message to server then back to channel
         $(".msg").keypress((e) => {
